@@ -10,10 +10,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 @app.route("/", methods=("GET", "POST"))
 def index():
     if request.method == "POST":
-        animal = request.form["animal"]
+        material = request.form["material"]
         response = openai.Completion.create(
             model="text-davinci-003",
-            prompt=generate_prompt(animal),
+            prompt=generate_prompt(material),
             temperature=0.6,
         )
         return redirect(url_for("index", result=response.choices[0].text))
@@ -22,14 +22,14 @@ def index():
     return render_template("index.html", result=result)
 
 
-def generate_prompt(animal):
-    return """Suggest three names for an animal that is a superhero.
+def generate_prompt(material):
+    return """Suggest three names for a product for this material type.
 
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: {}
+material: Aluminum
+Names: Aluminum Foil, Aluminum Spacers, Aluminum Cans
+material: Brass
+Names: Brass Bolts, Brass Bar, Brass Sheet
+material: {}
 Names:""".format(
-        animal.capitalize()
+        material.capitalize()
     )
